@@ -6,7 +6,7 @@ MVVM practice
 
 Design Pattern: MVVM <br>
 UI: Storyboard and Autolayout <br>
-News API: https://newsapi.org/
+News API: https://newsapi.org/ <br>
 Description: <br>
 Simple Table View that displays news from newsapi.org <br>
 with URL Image Loading and Caching
