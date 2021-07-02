@@ -8,8 +8,12 @@
 
 import UIKit
 
-struct ArticleListViewModel {
-    let articleList: [ArticleViewModel]
+struct ArticleListViewModel: Codable {
+    var articleList: [ArticleViewModel]
+    
+    init() {
+        self.articleList = []
+    }
     
     init(_ articles: [ArticleViewModel]) {
         self.articleList = articles
@@ -18,7 +22,7 @@ struct ArticleListViewModel {
 
 extension ArticleListViewModel {
     func numberOfRowsInSection(_ section: Int) -> Int {
-        return self.articleList.count
+        return 1
     }
     
     func articleAtIndex(_ index: Int) -> ArticleViewModel {
@@ -27,26 +31,47 @@ extension ArticleListViewModel {
     }
     
     func numberOfSectionsInTableView() -> Int {
-        return 1
+        return self.articleList.count
     }
     
     func heightForRow() -> CGFloat {
-        return 360
+        return 380
+    }
+    
+    func heightForHeader() -> CGFloat {
+        return 10
     }
 }
 
-struct ArticleViewModel {
+struct ArticleViewModel: Codable {
     let title: String
     let description: String
     let author: String
-    let publishedAt: String
-//    let urlToImage: URL
+    var publishedAt: String
+    let urlToImage: URL?
     
-    init (_ article: Article) {
+    init (article: Article) {
         self.title = article.title ?? ""
         self.description = article.description ?? ""
         self.author = article.author ?? ""
-        self.publishedAt = article.publishedAt ?? ""
-//        self.urlToImage = article.urlToImage ?? ""
+        self.publishedAt = ""
+        self.urlToImage = article.urlToImage ?? URL(string: "")
+        
+        convertISODateString(isoDateString: article.publishedAt ?? "")
+    }
+    
+    mutating func convertISODateString(isoDateString: String) {
+        let dateFormatter = DateFormatter()
+        let dateFormatter2 = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter2.timeZone = NSTimeZone.local
+        guard let publishedAtDate = dateFormatter.date(from: isoDateString) else {
+            return
+        }
+        
+        dateFormatter2.dateFormat = "MMM d, yyyy h:mm a"
+        let finalDate = dateFormatter2.string(from: publishedAtDate)
+        self.publishedAt = finalDate
     }
 }

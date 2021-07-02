@@ -10,7 +10,7 @@ import UIKit
 
 class ArticleListService: NSObject {
     
-    func getArticleList(_ completion: @escaping(_ result: [ArticleViewModel]?, _ error: Error?) -> Void) {
+    func getArticleList(_ completion: @escaping(_ result: ArticleListViewModel?, _ error: Error?) -> Void) {
         let url = URL(string: "https://newsapi.org/v2/top-headlines?country=us&apiKey=6919f4d873c7434ba18c811bc4befc32")
         
         NetworkService.shared.fetchItems(with: url!) { (data, error) in
@@ -18,18 +18,20 @@ class ArticleListService: NSObject {
                 completion(nil, error)
                 return
             }
+
+            let parsedResult = try? JSONDecoder().decode(ArticleList.self, from: data)
             
-            var articleViewModelList: [ArticleViewModel] = []
-            let articleListResult = try? JSONDecoder().decode(ArticleList.self, from: data)
-            
-            if let articleListResult = articleListResult {
-                for article in articleListResult.articles! {
-                    let articleViewModel = ArticleViewModel(article)
-                    articleViewModelList.append(articleViewModel)
+            if let parsedResult = parsedResult {
+                
+                var articleListViewModel = ArticleListViewModel()
+                
+                for article in parsedResult.articles! {
+                    let articleViewModel = ArticleViewModel(article: article)
+                    articleListViewModel.articleList.append(articleViewModel)
                 }
-                completion(articleViewModelList, nil)
+                
+                completion(articleListViewModel, nil)
             }
-            completion(nil, nil)
         }
     }
 
