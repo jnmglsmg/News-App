@@ -1,8 +1,7 @@
 # News-App
 MVVM practice
 
-![Simulator Screen Shot - iPhone 11 Pro Max - 2021-07-02 at 18 12 09](https://user-images.githubusercontent.com/85978406/124259558-386e5e80-db61-11eb-9fc3-ac435ab78f4b.png)
-
+![Screen Shot 2021-07-02 at 6 16 58 PM](https://user-images.githubusercontent.com/85978406/124260061-d4986580-db61-11eb-96f7-eea0b05aa16a.png)
 
 Design Pattern: MVVM <br>
 UI: Storyboard and Autolayout <br>
